@@ -1,0 +1,8 @@
+# ninja log v5
+3	420	7168205240110173	CMakeFiles/ParProg.dir/main.cpp.obj	db354bba003df84
+4	448	7168208627601290	CMakeFiles/ParProg.dir/Task3.cpp.obj	53feba486a4e45dd
+448	547	7168208628551095	ParProg.exe	8238f00db34ab56d
+9	61	7168205236528107	CMakeFiles/ParProg.dir/Task5.cpp.obj	7aa9a82592489b13
+17	132	7168155567875768	CMakeFiles/ParProg.dir/Task2.cpp.obj	ec6b7c0dc3bdb021
+21	155	7168152404114409	CMakeFiles/ParProg.dir/Task1.cpp.obj	aca00b232d967059
+19	167	7168193600381491	CMakeFiles/ParProg.dir/Task4.cpp.obj	8b2fd0b1d17a5acd
