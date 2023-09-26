@@ -79,6 +79,48 @@ build CMakeFiles/ParProg.dir/Task5.cpp.obj: CXX_COMPILER__ParProg_unscanned_Debu
   OBJECT_DIR = CMakeFiles\ParProg.dir
   OBJECT_FILE_DIR = CMakeFiles\ParProg.dir
 
+build CMakeFiles/ParProg.dir/Task6.cpp.obj: CXX_COMPILER__ParProg_unscanned_Debug C$:/Users/timer/CLionProjects/ParProg/Task6.cpp || cmake_object_order_depends_target_ParProg
+  DEP_FILE = CMakeFiles\ParProg.dir\Task6.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -Wall -fopenmp
+  OBJECT_DIR = CMakeFiles\ParProg.dir
+  OBJECT_FILE_DIR = CMakeFiles\ParProg.dir
+
+build CMakeFiles/ParProg.dir/Task7.cpp.obj: CXX_COMPILER__ParProg_unscanned_Debug C$:/Users/timer/CLionProjects/ParProg/Task7.cpp || cmake_object_order_depends_target_ParProg
+  DEP_FILE = CMakeFiles\ParProg.dir\Task7.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -Wall -fopenmp
+  OBJECT_DIR = CMakeFiles\ParProg.dir
+  OBJECT_FILE_DIR = CMakeFiles\ParProg.dir
+
+build CMakeFiles/ParProg.dir/Task8.cpp.obj: CXX_COMPILER__ParProg_unscanned_Debug C$:/Users/timer/CLionProjects/ParProg/Task8.cpp || cmake_object_order_depends_target_ParProg
+  DEP_FILE = CMakeFiles\ParProg.dir\Task8.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -Wall -fopenmp
+  OBJECT_DIR = CMakeFiles\ParProg.dir
+  OBJECT_FILE_DIR = CMakeFiles\ParProg.dir
+
+build CMakeFiles/ParProg.dir/Task9.cpp.obj: CXX_COMPILER__ParProg_unscanned_Debug C$:/Users/timer/CLionProjects/ParProg/Task9.cpp || cmake_object_order_depends_target_ParProg
+  DEP_FILE = CMakeFiles\ParProg.dir\Task9.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -Wall -fopenmp
+  OBJECT_DIR = CMakeFiles\ParProg.dir
+  OBJECT_FILE_DIR = CMakeFiles\ParProg.dir
+
+build CMakeFiles/ParProg.dir/Task10.cpp.obj: CXX_COMPILER__ParProg_unscanned_Debug C$:/Users/timer/CLionProjects/ParProg/Task10.cpp || cmake_object_order_depends_target_ParProg
+  DEP_FILE = CMakeFiles\ParProg.dir\Task10.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -Wall -fopenmp
+  OBJECT_DIR = CMakeFiles\ParProg.dir
+  OBJECT_FILE_DIR = CMakeFiles\ParProg.dir
+
+build CMakeFiles/ParProg.dir/Task11.cpp.obj: CXX_COMPILER__ParProg_unscanned_Debug C$:/Users/timer/CLionProjects/ParProg/Task11.cpp || cmake_object_order_depends_target_ParProg
+  DEP_FILE = CMakeFiles\ParProg.dir\Task11.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -Wall -fopenmp
+  OBJECT_DIR = CMakeFiles\ParProg.dir
+  OBJECT_FILE_DIR = CMakeFiles\ParProg.dir
+
+build CMakeFiles/ParProg.dir/Task12.cpp.obj: CXX_COMPILER__ParProg_unscanned_Debug C$:/Users/timer/CLionProjects/ParProg/Task12.cpp || cmake_object_order_depends_target_ParProg
+  DEP_FILE = CMakeFiles\ParProg.dir\Task12.cpp.obj.d
+  FLAGS = -g -fdiagnostics-color=always -Wall -fopenmp
+  OBJECT_DIR = CMakeFiles\ParProg.dir
+  OBJECT_FILE_DIR = CMakeFiles\ParProg.dir
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target ParProg
@@ -87,7 +129,7 @@ build CMakeFiles/ParProg.dir/Task5.cpp.obj: CXX_COMPILER__ParProg_unscanned_Debu
 #############################################
 # Link the executable ParProg.exe
 
-build ParProg.exe: CXX_EXECUTABLE_LINKER__ParProg_Debug CMakeFiles/ParProg.dir/Task1.cpp.obj CMakeFiles/ParProg.dir/Task2.cpp.obj CMakeFiles/ParProg.dir/Task3.cpp.obj CMakeFiles/ParProg.dir/Task4.cpp.obj CMakeFiles/ParProg.dir/Task5.cpp.obj
+build ParProg.exe: CXX_EXECUTABLE_LINKER__ParProg_Debug CMakeFiles/ParProg.dir/Task1.cpp.obj CMakeFiles/ParProg.dir/Task2.cpp.obj CMakeFiles/ParProg.dir/Task3.cpp.obj CMakeFiles/ParProg.dir/Task4.cpp.obj CMakeFiles/ParProg.dir/Task5.cpp.obj CMakeFiles/ParProg.dir/Task6.cpp.obj CMakeFiles/ParProg.dir/Task7.cpp.obj CMakeFiles/ParProg.dir/Task8.cpp.obj CMakeFiles/ParProg.dir/Task9.cpp.obj CMakeFiles/ParProg.dir/Task10.cpp.obj CMakeFiles/ParProg.dir/Task11.cpp.obj CMakeFiles/ParProg.dir/Task12.cpp.obj
   FLAGS = -g
   LINK_LIBRARIES = -fopenmp  -lkernel32 -luser32 -lgdi32 -lwinspool -lshell32 -lole32 -loleaut32 -luuid -lcomdlg32 -ladvapi32
   OBJECT_DIR = CMakeFiles\ParProg.dir
