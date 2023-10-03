@@ -20,24 +20,10 @@ int main() {
 
 #pragma omp for schedule(static, 3)
         for (int i = 0; i < 12; i++) {
-            a[i] = thread_num * 100 + i;
-            b[i] = thread_num * 200 + i;
+            a[i] = thread_num * 41 + i + 7;
+            b[i] = thread_num * 57 + i + 11;
         }
-#pragma omp critical
-        {
-            printf("initial array a:\n");
-            for (int i = 0; i < 12; i++) {
-                printf("%d ", a[i]);
-            }
-            printf("\n");
 
-
-            printf("initial array b:\n");
-            for (int i = 0; i < 12; i++) {
-                printf("%d ", b[i]);
-            }
-            printf("\n");
-        }
     }
 
 #pragma omp parallel num_threads(num_threads_2)
@@ -52,13 +38,23 @@ int main() {
         for (int i = 0; i < 12; i++) {
             c[i] = a[i] + b[i];
         }
-#pragma omp critical
-        {
-            printf("array c:\n");
-            for (int i = 0; i < 12; i++) {
-                printf("%d ", c[i]);
-            }
-        }
+    }
+
+    printf("initial array a:\n");
+    for (int i = 0; i < 12; i++) {
+        printf("%d ", a[i]);
+    }
+    printf("\n");
+
+    printf("initial array b:\n");
+    for (int i = 0; i < 12; i++) {
+        printf("%d ", b[i]);
+    }
+    printf("\n");
+
+    printf("array c:\n");
+    for (int i = 0; i < 12; i++) {
+        printf("%d ", c[i]);
     }
 
     return 0;

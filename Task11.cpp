@@ -15,7 +15,7 @@ int main() {
         array[i] = rand();
     }
 
-    int maxValue = -1;
+    int maxValue = -INT_MAX;
 
 #pragma omp parallel for
     for (int i = 0; i < arraySize; i++) {
@@ -29,10 +29,10 @@ int main() {
         }
     }
 
-    if (maxValue != -1) {
+    if (maxValue != -INT_MAX) {
         printf("max value dividable by 7: %d", maxValue);
     } else {
-        std::cout << "no numbers dividable by 7" << std::endl;
+        printf("no numbers dividable by 7");
     }
 
     return 0;

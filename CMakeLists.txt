@@ -19,6 +19,9 @@ add_executable(ParProg
         Task9.cpp
         Task10.cpp
         Task11.cpp
+        Task13.cpp
+        Task14.cpp
+        Task15.cpp
 )
 
 target_compile_options(ParProg PRIVATE -Wall ${OpenMP_CXX_FLAGS})

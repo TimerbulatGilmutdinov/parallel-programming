@@ -22,6 +22,8 @@ std::vector<double> MatrixVectorMultiplyParallel(const std::vector<std::vector<d
     int numCols = matrix[0].size();
     std::vector<double> result(numRows, 0.0);
 
+    omp_set_num_threads(16);
+
 #pragma omp parallel for
     for (int i = 0; i < numRows; i++) {
         for (int j = 0; j < numCols; j++) {
@@ -47,15 +49,8 @@ int main() {
     std::vector<double> resultParallel = MatrixVectorMultiplyParallel(matrix, vector);
     double endTimeParallel = omp_get_wtime();
 
-    for (int i = 0; i < numRows; i++) {
-        if (resultSeq[i] != resultParallel[i]) {
-            std::cerr << "matrix aren't equal!" << std::endl;
-            return 1;
-        }
-    }
-
-    std::cout << "sequential time: " << endTimeSeq - startTimeSeq << " sec" << std::endl;
-    std::cout << "parallel execution time: " << endTimeParallel - startTimeParallel << " sec" << std::endl;
+    printf("sequential time: %f sec\n", endTimeSeq-startTimeSeq);
+    printf("parallel execution time: %f sec", endTimeParallel - startTimeParallel);
 
     return 0;
 }

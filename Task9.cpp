@@ -3,10 +3,9 @@
 #include <ctime>
 #include <omp.h>
 
-#define ROWS 6
-#define COLS 8
-
 int main() {
+    const int ROWS = 6;
+    const int COLS = 8;
     int d[ROWS][COLS];
     int min_value = INT_MAX;
     int max_value = INT_MIN;

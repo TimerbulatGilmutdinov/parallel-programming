@@ -14,7 +14,7 @@ int main() {
         b[i] = i * 5;
     }
 
-#pragma omp parallel for reduction(+:sum_a, sum_b)
+#pragma omp parallel for reduction(+:sum_a, sum_b) firstprivate(a,b)
     for (int i = 0; i < 10; i++) {
         sum_a += a[i];
         sum_b += b[i];
