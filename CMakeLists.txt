@@ -48,33 +48,33 @@ target_compile_options(task14 PRIVATE -Wall ${OpenMP_CXX_FLAGS})
 add_executable(task15 OpenMP/Task15.cpp)
 target_compile_options(task15 PRIVATE -Wall ${OpenMP_CXX_FLAGS})
 
-add_executable(task1_1 MPI/MPI_task_1.cpp)
+add_executable(task1_1 MPI/MPI_task_1_1.cpp)
 target_link_libraries(task1_1 PUBLIC MPI::MPI_CXX)
 
-add_executable(task1_2 MPI/MPI_task_2.cpp)
+add_executable(task1_2 MPI/MPI_task_1_2.cpp)
 target_link_libraries(task1_2 PUBLIC MPI::MPI_CXX)
 
-add_executable(task1_3 MPI/MPI_task_3.cpp)
+add_executable(task1_3 MPI/MPI_task_1_3.cpp)
 target_link_libraries(task1_3 PUBLIC MPI::MPI_CXX)
 
-add_executable(task1_4 MPI/MPI_task_4.cpp)
+add_executable(task1_4 MPI/MPI_task_1_4.cpp)
 target_link_libraries(task1_4 PUBLIC MPI::MPI_CXX)
 
-add_executable(task1_5 MPI/MPI_task_5.cpp)
+add_executable(task1_5 MPI/MPI_task_1_5.cpp)
 target_link_libraries(task1_5 PUBLIC MPI::MPI_CXX)
 
-add_executable(task2_1 MPI/MPI_task_6.cpp)
+add_executable(task2_1 MPI/MPI_task_2_1.cpp)
 target_link_libraries(task2_1 PUBLIC MPI::MPI_CXX)
 
-add_executable(task2_2 MPI/MPI_task_7.cpp)
+add_executable(task2_2 MPI/MPI_task_2_2.cpp)
 target_link_libraries(task2_2 PUBLIC MPI::MPI_CXX)
 
-add_executable(task2_3 MPI/MPI_task_8.cpp)
+add_executable(task2_3 MPI/MPI_task_2_3.cpp)
 target_link_libraries(task2_3 PUBLIC MPI::MPI_CXX)
 
-add_executable(task2_4 MPI/MPI_task_9.cpp)
+add_executable(task2_4 MPI/MPI_task_2_4.cpp)
 target_link_libraries(task2_4 PUBLIC MPI::MPI_CXX)
 
-add_executable(task2_5 MPI/MPI_task_10.cpp)
+add_executable(task2_5 MPI/MPI_task_2_5.cpp)
 target_link_libraries(task2_5 PUBLIC MPI::MPI_CXX)
 
