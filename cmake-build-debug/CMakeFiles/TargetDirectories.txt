@@ -1,3 +1,0 @@
-C:/Users/timer/CLionProjects/ParProg/cmake-build-debug/CMakeFiles/ParProg.dir
-C:/Users/timer/CLionProjects/ParProg/cmake-build-debug/CMakeFiles/edit_cache.dir
-C:/Users/timer/CLionProjects/ParProg/cmake-build-debug/CMakeFiles/rebuild_cache.dir
