@@ -25,10 +25,14 @@ int main(int argc, char **argv) {
         }
 
         for (int i = 1; i < size; i++) {
-            MPI_Send(matrix, N * N, MPI_INT, i, 0, MPI_COMM_WORLD);
+            for (int row = i - 1; row < N; row += size - 1) {
+                MPI_Send(matrix[row], N, MPI_INT, i, 0, MPI_COMM_WORLD);
+            }
         }
     } else {
-        MPI_Recv(matrix, N * N, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        for (int row = rank - 1; row < N; row += size - 1) {
+            MPI_Recv(matrix[row], N, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        }
     }
 
     for (int i = 0; i < N; i++) {

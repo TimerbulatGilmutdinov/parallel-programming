@@ -1,7 +1,7 @@
 ﻿#include <iostream>
 #include <mpi.h>
 
-int main(int argc, char** argv) {
+int main(int argc, char **argv) {
     const int N = 15;
 
     int rank, size;
@@ -18,14 +18,14 @@ int main(int argc, char** argv) {
         for (int i = 0; i < N; ++i) {
             vector[i] = rand() % 5;
             for (int j = 0; j < N; ++j) {
-                matrix[i][j] = 13 * i + j;
+                matrix[i][j] = 3 * i + j;
                 printf("%d ", matrix[i][j]);
             }
             printf("\n");
         }
 
         printf("Vector: \n");
-        for(int i : vector) {
+        for (int i: vector) {
             printf("%d ", i);
         }
         printf("\n");
@@ -34,8 +34,7 @@ int main(int argc, char** argv) {
             MPI_Send(vector, N, MPI_INT, i, 0, MPI_COMM_WORLD);
             MPI_Send(matrix, N * N, MPI_INT, i, 0, MPI_COMM_WORLD);
         }
-    }
-    else {
+    } else {
         MPI_Recv(vector, N, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         MPI_Recv(matrix, N * N, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     }
@@ -61,12 +60,11 @@ int main(int argc, char** argv) {
         }
 
         printf("Result vector: \n");
-        for(int i : result) {
+        for (int i: result) {
             printf("%d ", i);
         }
         printf("\n");
-    }
-    else {
+    } else {
         MPI_Send(buf, N, MPI_INT, 0, 0, MPI_COMM_WORLD);
     }
 
