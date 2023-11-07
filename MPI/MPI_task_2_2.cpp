@@ -2,13 +2,16 @@
 #include <mpi.h>
 
 int main(int argc, char **argv) {
-    const int N = 15;
+    const int N = 3;
 
     int rank, size;
 
     MPI_Init(&argc, &argv);
     MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
+
+    const int rowsPerProcess = N / size;
+    const int elementsPerProcess = rowsPerProcess * N;
 
     int vector[N];
     int matrix[N][N];
@@ -31,12 +34,13 @@ int main(int argc, char **argv) {
         printf("\n");
 
         for (int i = 1; i < size; ++i) {
+            int startRow = i * rowsPerProcess;
             MPI_Send(vector, N, MPI_INT, i, 0, MPI_COMM_WORLD);
-            MPI_Send(matrix, N * N, MPI_INT, i, 0, MPI_COMM_WORLD);
+            MPI_Send(&matrix[startRow][0], elementsPerProcess, MPI_INT, i, 0, MPI_COMM_WORLD);
         }
     } else {
         MPI_Recv(vector, N, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        MPI_Recv(matrix, N * N, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(matrix, elementsPerProcess, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     }
 
     int buf[N];
