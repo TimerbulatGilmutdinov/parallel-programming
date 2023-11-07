@@ -51,9 +51,6 @@ target_compile_options(task15 PRIVATE -Wall ${OpenMP_CXX_FLAGS})
 add_executable(task1_1 MPI/MPI_task_1_1.cpp)
 target_link_libraries(task1_1 PUBLIC MPI::MPI_CXX)
 
-add_executable(copy MPI/copy.cpp)
-target_link_libraries(copy PUBLIC MPI::MPI_CXX)
-
 add_executable(task1_2 MPI/MPI_task_1_2.cpp)
 target_link_libraries(task1_2 PUBLIC MPI::MPI_CXX)
 
