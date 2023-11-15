@@ -56,8 +56,8 @@ int main(int argc, char** argv) {
             }
         }
     } else {
-        MPI_Recv(&localMatrixA[0][0], elements_for_process_count, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        MPI_Recv(&localMatrixB[0][0], elements_for_process_count, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(&localMatrixA, elements_for_process_count, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(&localMatrixB, elements_for_process_count, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
     }
 
     for (int i = 0; i < N; ++i) {
