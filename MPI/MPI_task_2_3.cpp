@@ -44,7 +44,7 @@ int main(int argc, char** argv) {
 
         for (int i = 1; i < size; ++i) {
             int start = i * elements_for_process_count;
-            int end = (i == size - 1) ? (N * N) : ((i + 1) * elements_for_process_count);
+            int end = (i + 1) * elements_for_process_count;
             MPI_Send(&matrixA[0][0] + start, end - start, MPI_INT, i, 0, MPI_COMM_WORLD);
             MPI_Send(&matrixB[0][0] + start, end - start, MPI_INT, i, 0, MPI_COMM_WORLD);
         }
