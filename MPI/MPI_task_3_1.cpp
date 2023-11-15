@@ -35,7 +35,7 @@ int main(int argc, char **argv) {
         local_sum += local_vector[i];
     }
 
-    MPI_Reduce(&local_sum, &local_norm, 1, MPI_DOUBLE, MPI_SUM, 0, MPI_COMM_WORLD);
+    MPI_Reduce(&local_sum, &local_norm, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
 
     if (rank == 0) {
         printf("Result: %d", local_norm);

@@ -31,15 +31,15 @@ int main(int argc, char** argv) {
     int local_sum = 0;
     int local_product = 0;
 
-    int local_size = vectorSize / size;
+    int single_process_vector_size = vectorSize / size;
 
-    int local_vector1[local_size];
-    int local_vector2[local_size];
+    int local_vector1[single_process_vector_size];
+    int local_vector2[single_process_vector_size];
 
-    MPI_Scatter(vector_1, local_size, MPI_INT, local_vector1, local_size, MPI_INT, 0, MPI_COMM_WORLD);
-    MPI_Scatter(vector_2, local_size, MPI_INT, local_vector2, local_size, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Scatter(vector_1, single_process_vector_size, MPI_INT, local_vector1, single_process_vector_size, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Scatter(vector_2, single_process_vector_size, MPI_INT, local_vector2, single_process_vector_size, MPI_INT, 0, MPI_COMM_WORLD);
 
-    for (int i = 0; i < local_size; ++i) {
+    for (int i = 0; i < single_process_vector_size; ++i) {
         local_product += local_vector1[i] * local_vector2[i];
     }
 
