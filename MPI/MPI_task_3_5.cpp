@@ -22,17 +22,17 @@ int main(int argc, char **argv) {
 
     int single_process_vector_size = vectorSize / size;
 
-    int local_process_vector[single_process_vector_size];
+    int local_process_vector_buf[single_process_vector_size];
 
-    MPI_Scatter(vector, single_process_vector_size, MPI_INT, local_process_vector, single_process_vector_size, MPI_INT,
+    MPI_Scatter(vector, single_process_vector_size, MPI_INT, local_process_vector_buf, single_process_vector_size, MPI_INT,
                 0, MPI_COMM_WORLD);
 
     int local_max = 0;
     int local_max_index = 0;
 
     for (int i = 0; i < single_process_vector_size; ++i) {
-        if (local_process_vector[i] > local_max) {
-            local_max = local_process_vector[i];
+        if (local_process_vector_buf[i] > local_max) {
+            local_max = local_process_vector_buf[i];
             local_max_index = i;
         }
     }

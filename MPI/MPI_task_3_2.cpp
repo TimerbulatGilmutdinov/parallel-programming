@@ -33,14 +33,14 @@ int main(int argc, char** argv) {
 
     int single_process_vector_size = vectorSize / size;
 
-    int local_vector1[single_process_vector_size];
-    int local_vector2[single_process_vector_size];
+    int local_vector_1_buf[single_process_vector_size];
+    int local_vector_2_buf[single_process_vector_size];
 
-    MPI_Scatter(vector_1, single_process_vector_size, MPI_INT, local_vector1, single_process_vector_size, MPI_INT, 0, MPI_COMM_WORLD);
-    MPI_Scatter(vector_2, single_process_vector_size, MPI_INT, local_vector2, single_process_vector_size, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Scatter(vector_1, single_process_vector_size, MPI_INT, local_vector_1_buf, single_process_vector_size, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Scatter(vector_2, single_process_vector_size, MPI_INT, local_vector_2_buf, single_process_vector_size, MPI_INT, 0, MPI_COMM_WORLD);
 
     for (int i = 0; i < single_process_vector_size; ++i) {
-        local_product += local_vector1[i] * local_vector2[i];
+        local_product += local_vector_1_buf[i] * local_vector_2_buf[i];
     }
 
     MPI_Reduce(&local_product, &local_sum, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);

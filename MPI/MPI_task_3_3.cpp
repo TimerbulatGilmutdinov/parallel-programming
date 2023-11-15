@@ -34,16 +34,15 @@ int main(int argc, char** argv) {
 
     MPI_Bcast(vector, vectorSize, MPI_INT, 0, MPI_COMM_WORLD);
 
-    // Размер подматрицы для каждого процесса
     int single_process_sub_matrix_size = matrixSize / size;
 
-    int local_matrix[single_process_sub_matrix_size][matrixSize];
+    int local_matrix_buf[single_process_sub_matrix_size][matrixSize];
 
-    MPI_Scatter(matrix, single_process_sub_matrix_size * matrixSize, MPI_INT, local_matrix, single_process_sub_matrix_size * matrixSize, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Scatter(matrix, single_process_sub_matrix_size * matrixSize, MPI_INT, local_matrix_buf, single_process_sub_matrix_size * matrixSize, MPI_INT, 0, MPI_COMM_WORLD);
 
     for (int i = 0; i < single_process_sub_matrix_size; ++i) {
         for (int j = 0; j < matrixSize; ++j) {
-            local_result[i] += local_matrix[i][j] * vector[j];
+            local_result[i] += local_matrix_buf[i][j] * vector[j];
         }
     }
 

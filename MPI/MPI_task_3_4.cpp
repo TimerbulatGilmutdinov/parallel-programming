@@ -24,16 +24,16 @@ int main(int argc, char** argv) {
         }
     }
 
-    int local_rows = matrixSize / size;
+    int local_rows_size = matrixSize / size;
 
-    int local_matrix[local_rows][matrixSize];
+    int local_matrix_buf[local_rows_size][matrixSize];
 
-    MPI_Scatter(matrix, local_rows * matrixSize, MPI_INT, local_matrix, local_rows * matrixSize, MPI_INT, 0, MPI_COMM_WORLD);
+    MPI_Scatter(matrix, local_rows_size * matrixSize, MPI_INT, local_matrix_buf, local_rows_size * matrixSize, MPI_INT, 0, MPI_COMM_WORLD);
     int local_max = 0;
-    for (int i = 0; i < local_rows; i++) {
+    for (int i = 0; i < local_rows_size; i++) {
         int row_sum = 0;
         for (int j = 0; j < matrixSize; j++) {
-            row_sum += std::abs(local_matrix[i][j]);
+            row_sum += std::abs(local_matrix_buf[i][j]);
         }
         if (row_sum > local_max) {
             local_max = row_sum;

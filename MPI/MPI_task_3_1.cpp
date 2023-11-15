@@ -26,13 +26,13 @@ int main(int argc, char **argv) {
 
     int single_process_vector_size = vectorSize / size;
 
-    int local_vector[single_process_vector_size];
+    int local_vector_buf[single_process_vector_size];
 
-    MPI_Scatter(vector, single_process_vector_size, MPI_INT, local_vector, single_process_vector_size, MPI_INT, 0,
+    MPI_Scatter(vector, single_process_vector_size, MPI_INT, local_vector_buf, single_process_vector_size, MPI_INT, 0,
                 MPI_COMM_WORLD);
 
     for (int i = 0; i < single_process_vector_size; ++i) {
-        local_sum += local_vector[i];
+        local_sum += local_vector_buf[i];
     }
 
     MPI_Reduce(&local_sum, &local_norm, 1, MPI_INT, MPI_SUM, 0, MPI_COMM_WORLD);
