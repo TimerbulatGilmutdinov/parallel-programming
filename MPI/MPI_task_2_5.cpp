@@ -3,67 +3,66 @@
 #include <cstdlib>
 
 int main(int argc, char **argv) {
-    const int N = 10;
-
     int rank, size;
 
     MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    int matrix[N][N];
-    int transposedMatrix[N][N];
+    const int rows_count = 10;
+    const int columns_count = 10;
 
     if (rank == 0) {
-        printf("Init matrix: \n");
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                matrix[i][j] = i * (rand() % 5) + j * 2;
-                printf("%d ", matrix[i][j]);
+        int initial_matrix[rows_count][columns_count];
+        int transposed_matrix[columns_count][rows_count];
+
+        for (int i = 0; i < rows_count; ++i) {
+            for (int j = 0; j < columns_count; j++) {
+                initial_matrix[i][j] = rand() % 10;
+            }
+        }
+
+        printf("initial matrix:\n");
+        for (int i = 0; i < rows_count; ++i) {
+            for (int j = 0; j < columns_count; j++) {
+                printf("%d ", initial_matrix[i][j]);
             }
             printf("\n");
         }
+        printf("\n");
 
-        for (int i = 1; i < size; i++) {
-            for (int row = i - 1; row < N; row += size - 1) {
-                MPI_Send(matrix[row], N, MPI_INT, i, 0, MPI_COMM_WORLD);
-            }
+        for (int sent = 0; sent < rows_count; sent++) {
+            MPI_Send(&initial_matrix[sent][0], columns_count, MPI_INT, 1, 0, MPI_COMM_WORLD);
         }
-    } else {
-        for (int row = rank - 1; row < N; row += size - 1) {
-            MPI_Recv(matrix[row], N, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+        for (int received = 0; received < columns_count; received++) {
+            MPI_Recv(&transposed_matrix[received][0], rows_count, MPI_INT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }
-    }
 
-    for (int i = 0; i < N; i++) {
-        for (int j = 0; j < N; j++) {
-            transposedMatrix[j][i] = matrix[i][j];
-        }
-    }
-
-    if (rank == 0) {
-        int result[N][N];
-
-        for (int i = 1; i < size; i++) {
-            MPI_Recv(&result[0][0], N * N, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-            for (int j = 0; j < N; j++) {
-                for (int k = 0; k < N; k++) {
-                    if (result[j][k] == 0) {
-                        result[j][k] = transposedMatrix[j][k];
-                    }
-                }
-            }
-        }
-        printf("Transposed matrix:\n");
-        for (int i = 0; i < N; i++) {
-            for (int j = 0; j < N; j++) {
-                printf("%d ", transposedMatrix[i][j]);
+        printf("transposed matrix:\n");
+        for (int i = 0; i < columns_count; ++i) {
+            for (int j = 0; j < rows_count; j++) {
+                printf("%d ", transposed_matrix[i][j]);
             }
             printf("\n");
         }
-    } else {
-        MPI_Send(&transposedMatrix[0][0], N * N, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        printf("\n");
+    } else if (rank == 1) {
+        int matrix[rows_count][columns_count];
+
+        for (int received = 0; received < rows_count; received++) {
+            MPI_Recv(&matrix[received][0], columns_count, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        }
+        int transposed_matrix[rows_count][columns_count];
+        for (int i = 0; i < rows_count; ++i) {
+            for (int j = 0; j < columns_count; j++) {
+                transposed_matrix[j][i] = matrix[i][j];
+            }
+        }
+
+        for (int sent = 0; sent < columns_count; sent++) {
+            MPI_Send(&transposed_matrix[sent][0], rows_count, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        }
     }
 
     MPI_Finalize();

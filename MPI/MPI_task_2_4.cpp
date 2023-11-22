@@ -1,103 +1,126 @@
-#include <stdio.h>
+#include <iostream>
+#include <string>
 #include <mpi.h>
+#include <algorithm>
 
-int main(int argc, char** argv) {
-    MPI_Init(&argc, &argv);
+int** get_transposed_matrix(int **input_arr, int rows_count, int columns_count) {
+    int *arr = new int[rows_count * columns_count];
+    int **arrT = new int *[columns_count];
+    for (int i = 0; i < columns_count; i++) {
+        arrT[i] = &arr[i * rows_count];
+    }
+    for (int i = 0; i < rows_count; ++i) {
+        for (int j = 0; j < columns_count; j++) {
+            arrT[j][i] = input_arr[i][j];
+        }
+    }
+    return arrT;
+}
 
+int** get_filled_matrix(int rows_count, int columns_count) {
+    int *arr = new int[rows_count * columns_count];
+    int **arr2 = new int *[rows_count];
+    for (int i = 0; i < rows_count; i++) {
+        arr2[i] = &arr[i * columns_count];
+    }
+    for (int i = 0; i < rows_count; ++i) {
+        for (int j = 0; j < columns_count; j++) {
+            arr2[i][j] = rand() % 10;
+        }
+    }
+    return arr2;
+}
+
+int main(int argc, char **argv) {
     int rank, size;
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
+
+    MPI_Init(&argc, &argv);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    const int matrixSize = 10;
-    const int rowsPerProcess = matrixSize / size;
-    const int elementsPerProcess = rowsPerProcess * matrixSize;
+    const int rows_count_A = 10;
+    const int columns_count_A = 12;
 
-    int matrixA[matrixSize][matrixSize];
-    int matrixB[matrixSize][matrixSize];
-    int localMatrixA[rowsPerProcess][matrixSize];
-    int localMatrixB[matrixSize][matrixSize];
-    int localMatrixC[rowsPerProcess][matrixSize];
+    const int rows_count_B = 12;
+    const int columns_count_B = 10;
 
-    if (rank == 0) {
-        for (int i = 0; i < matrixSize; ++i) {
-            for (int j = 0; j < matrixSize; ++j) {
-                matrixA[i][j] = i * matrixSize + j;
-                matrixB[i][j] = j * matrixSize + i;
-            }
-        }
+    const int result_matrix_rows_count = rows_count_A;
+    const int result_matrix_columns_count = columns_count_B;
 
-        printf("Matrix A:\n");
-        for (int i = 0; i < matrixSize; ++i) {
-            for (int j = 0; j < matrixSize; ++j) {
-                printf("%d ", matrixA[i][j]);
-            }
-            printf("\n");
-        }
+    const int sendSize = result_matrix_rows_count / (size - 1);
 
-        printf("Matrix B:\n");
-        for (int i = 0; i < matrixSize; ++i) {
-            for (int j = 0; j < matrixSize; ++j) {
-                printf("%d ", matrixB[i][j]);
-            }
-            printf("\n");
-        }
-
-        for (int i = 1; i < size; ++i) {
-            int startRow = i * rowsPerProcess;
-            MPI_Send(&matrixA[startRow][0], elementsPerProcess, MPI_INT, i, 0, MPI_COMM_WORLD);
-            MPI_Send(&matrixB[0][0], matrixSize * matrixSize, MPI_INT, i, 0, MPI_COMM_WORLD);
-        }
-
-        for (int i = 0; i < rowsPerProcess; ++i) {
-            for (int j = 0; j < matrixSize; ++j) {
-                localMatrixA[i][j] = matrixA[i][j];
-            }
-        }
-        for (int i = 0; i < matrixSize; ++i) {
-            for (int j = 0; j < matrixSize; ++j) {
-                localMatrixB[i][j] = matrixB[i][j];
-            }
-        }
-    } else {
-        MPI_Recv(&localMatrixA[0][0], elementsPerProcess, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        MPI_Recv(&localMatrixB[0][0], matrixSize * matrixSize, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+    if (result_matrix_rows_count % (size - 1) != 0) {
+        MPI_Finalize();
+        printf("invalid process count");
+        exit(1);
     }
 
-    for (int i = 0; i < rowsPerProcess; ++i) {
-        for (int j = 0; j < matrixSize; ++j) {
-            localMatrixC[i][j] = 0;
-            for (int k = 0; k < matrixSize; ++k) {
-                localMatrixC[i][j] += localMatrixA[i][k] * localMatrixB[k][j];
-            }
-        }
+    if (columns_count_A != rows_count_B) {
+        MPI_Finalize();
+        printf("invalid matrix's sizes");
+        exit(1);
     }
 
     if (rank == 0) {
-        int resultMatrix[matrixSize][matrixSize];
+        int **matrix_A = get_filled_matrix(rows_count_A, columns_count_A);
+        int **matrix_B = get_filled_matrix(rows_count_B, columns_count_B);
+        int result_matrix[result_matrix_rows_count][result_matrix_columns_count];
 
-        for (int i = 1; i < size; ++i) {
-            int startRow = i * rowsPerProcess;
-            MPI_Recv(&resultMatrix[startRow][0], elementsPerProcess, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        }
-
-        for (int i = 0; i < rowsPerProcess; ++i) {
-            for (int j = 0; j < matrixSize; ++j) {
-                resultMatrix[i][j] = localMatrixC[i][j];
-            }
-        }
-
-        printf("Result Matrix C:\n");
-        for (int i = 0; i < matrixSize; ++i) {
-            for (int j = 0; j < matrixSize; ++j) {
-                printf("%d ", resultMatrix[i][j]);
+        printf("A:\n");
+        for (int i = 0; i < rows_count_A; ++i) {
+            for (int j = 0; j < columns_count_A; j++) {
+                printf("%d ", matrix_A[i][j]);
             }
             printf("\n");
         }
+        printf("\n");
+        printf("B:\n");
+        for (int i = 0; i < rows_count_B; ++i) {
+            for (int j = 0; j < columns_count_B; j++) {
+                printf("%d ", matrix_B[i][j]);
+            }
+            printf("\n");
+        }
+        printf("\n");
+
+        int **transposed_matrix_B = get_transposed_matrix(matrix_B, rows_count_B, columns_count_B);
+
+        for (int i = 1, startIndex = 0; i < size; i++,startIndex+=sendSize) {
+            MPI_Send(&matrix_A[startIndex][0], sendSize * columns_count_A, MPI_INT, i, 0, MPI_COMM_WORLD);
+            MPI_Send(&transposed_matrix_B[0][0], rows_count_B * columns_count_B, MPI_INT, i, 0, MPI_COMM_WORLD);
+        }
+
+        for (int i = 1, startIndex = 0; i < size; i++, startIndex+=sendSize) {
+            MPI_Recv(&result_matrix[startIndex][0], sendSize * result_matrix_columns_count, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        }
+
+        printf("C:\n");
+        for (int i = 0; i < result_matrix_rows_count; ++i) {
+            for (int j = 0; j < result_matrix_columns_count; j++) {
+                printf("%d ", result_matrix[i][j]);
+            }
+            printf("\n");
+        }
+        printf("\n");
     } else {
-        MPI_Send(&localMatrixC[0][0], elementsPerProcess, MPI_INT, 0, 0, MPI_COMM_WORLD);
+        int matrix_A[sendSize][columns_count_A];
+        int transposed_matrix_B[columns_count_B][rows_count_B];
+        int result_matrix_buf[sendSize][columns_count_B];
+
+        MPI_Recv(&matrix_A[0][0], sendSize * columns_count_A, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(&transposed_matrix_B[0][0], rows_count_B * columns_count_B, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+
+        for (int i = 0; i < sendSize; i++) {
+            for (int j = 0; j < columns_count_B; j++) {
+                result_matrix_buf[i][j] = 0;
+                for (int k = 0; k < columns_count_A; k++) {
+                    result_matrix_buf[i][j] += matrix_A[i][k] * transposed_matrix_B[j][k];
+                }
+            }
+        }
+        MPI_Send(&result_matrix_buf[0][0], sendSize * columns_count_B, MPI_INT, 0, 0, MPI_COMM_WORLD);
     }
 
     MPI_Finalize();
-
     return 0;
 }

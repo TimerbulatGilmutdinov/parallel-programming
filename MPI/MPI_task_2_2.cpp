@@ -2,77 +2,86 @@
 #include <mpi.h>
 
 int main(int argc, char **argv) {
-    const int N = 3;
-
     int rank, size;
 
     MPI_Init(&argc, &argv);
-    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
     MPI_Comm_size(MPI_COMM_WORLD, &size);
+    MPI_Comm_rank(MPI_COMM_WORLD, &rank);
 
-    const int rowsPerProcess = N / size;
-    const int elementsPerProcess = rowsPerProcess * N;
+    const int n = 10;
+    const int sendSize = n / (size - 1);
 
-    int vector[N];
-    int matrix[N][N];
+    if (n % (size - 1) != 0) {
+        MPI_Finalize();
+        printf("invalid process count");
+        exit(1);
+    }
 
     if (rank == 0) {
-        printf("Matrix: \n");
-        for (int i = 0; i < N; ++i) {
-            vector[i] = rand() % 5;
-            for (int j = 0; j < N; ++j) {
-                matrix[i][j] = 3 * i + j;
-                printf("%d ", matrix[i][j]);
+
+        int a[n][n];
+        int b[n];
+        int c[n];
+
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; j++) {
+                a[i][j] = rand() % 10;
+            }
+        }
+        for (int i = 0; i < n; ++i) {
+            b[i] = rand() % 10;
+        }
+
+        printf("A:\n");
+        for (int i = 0; i < n; ++i) {
+            for (int j = 0; j < n; j++) {
+                printf("%d ", a[i][j]);
             }
             printf("\n");
         }
-
-        printf("Vector: \n");
-        for (int i: vector) {
-            printf("%d ", i);
+        printf("\n");
+        printf("B:\n");
+        for (int i = 0; i < n; ++i) {
+            printf("%d ", b[i]);
         }
         printf("\n");
 
-        for (int i = 1; i < size; ++i) {
-            int startRow = i * rowsPerProcess;
-            MPI_Send(vector, N, MPI_INT, i, 0, MPI_COMM_WORLD);
-            MPI_Send(&matrix[startRow][0], elementsPerProcess, MPI_INT, i, 0, MPI_COMM_WORLD);
+
+        int startIndex = 0;
+        for (int i = 1; i < size; i++) {
+            MPI_Send(&a[startIndex][0], sendSize * n, MPI_INT, i, 0, MPI_COMM_WORLD);
+            MPI_Send(&b[0], n, MPI_INT, i, 0, MPI_COMM_WORLD);
+            startIndex += sendSize;
+        }
+
+        startIndex = 0;
+        for (int i = 1; i < size; i++) {
+            MPI_Recv(&c[startIndex], sendSize, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+            startIndex += sendSize;
+        }
+
+        printf("C:\n");
+        for (int i = 0; i < n; ++i) {
+            printf("%d ", c[i]);
         }
     } else {
-        MPI_Recv(vector, N, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-        MPI_Recv(matrix, elementsPerProcess, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-    }
+        int a[sendSize][n];
+        int b[n];
+        int c[sendSize];
 
-    int buf[N];
+        MPI_Recv(&a[0][0], sendSize * n, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        MPI_Recv(&b[0], n, MPI_INT, 0, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
 
-    for (int i = 0; i < N; ++i) {
-        buf[i] = 0;
-        for (int k = 0; k < N; ++k) {
-            buf[i] += matrix[i][k] * vector[k];
-        }
-    }
-
-    if (rank == 0) {
-        int result[N];
-
-        for (int i = 1; i < size; ++i) {
-            MPI_Recv(result, N, MPI_INT, i, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
-
-            for (int j = 0; j < N; ++j) {
-                result[j] = buf[j];
+        for (int i = 0; i < sendSize; i++) {
+            c[i] = 0;
+            for (int j = 0; j < n; j++) {
+                c[i] += a[i][j] * b[j];
             }
         }
+        MPI_Send(&c[0], sendSize, MPI_INT, 0, 0, MPI_COMM_WORLD);
 
-        printf("Result vector: \n");
-        for (int i: result) {
-            printf("%d ", i);
-        }
-        printf("\n");
-    } else {
-        MPI_Send(buf, N, MPI_INT, 0, 0, MPI_COMM_WORLD);
     }
 
     MPI_Finalize();
-
     return 0;
 }
