@@ -31,12 +31,12 @@ int main(int argc, char **argv) {
         }
         printf("\n");
 
-        for (int sent = 0; sent < rows_count; sent++) {
-            MPI_Send(&initial_matrix[sent][0], columns_count, MPI_INT, 1, 0, MPI_COMM_WORLD);
+        for (int sending_row_index = 0; sending_row_index < rows_count; sending_row_index++) {
+            MPI_Send(&initial_matrix[sending_row_index][0], columns_count, MPI_INT, 1, 0, MPI_COMM_WORLD);
         }
 
-        for (int received = 0; received < columns_count; received++) {
-            MPI_Recv(&transposed_matrix[received][0], rows_count, MPI_INT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
+        for (int receiving_row_index = 0; receiving_row_index < columns_count; receiving_row_index++) {
+            MPI_Recv(&transposed_matrix[receiving_row_index][0], rows_count, MPI_INT, 1, 0, MPI_COMM_WORLD, MPI_STATUS_IGNORE);
         }
 
         printf("transposed matrix:\n");

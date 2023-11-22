@@ -55,12 +55,6 @@ int main(int argc, char **argv) {
         exit(1);
     }
 
-    if (columns_count_A != rows_count_B) {
-        MPI_Finalize();
-        printf("invalid matrix's sizes");
-        exit(1);
-    }
-
     if (rank == 0) {
         int **matrix_A = get_filled_matrix(rows_count_A, columns_count_A);
         int **matrix_B = get_filled_matrix(rows_count_B, columns_count_B);
