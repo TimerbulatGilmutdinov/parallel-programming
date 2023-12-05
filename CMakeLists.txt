@@ -93,3 +93,9 @@ target_link_libraries(task3_4 PUBLIC MPI::MPI_CXX)
 add_executable(task3_5 MPI/MPI_task_3_5.cpp)
 target_link_libraries(task3_5 PUBLIC MPI::MPI_CXX)
 
+add_executable(task4_1 MPI/MPI_task_4_1.cpp)
+target_link_libraries(task4_1 PUBLIC MPI::MPI_CXX)
+
+add_executable(task4_2 MPI/MPI_task_4_2.cpp)
+target_link_libraries(task4_2 PUBLIC MPI::MPI_CXX)
+
